@@ -5,7 +5,7 @@
 
 
 #define SAMPLES 200
-#define WAVELENGTH 12000
+#define WAVELENGTH 20000
 #define KEYBYTES 16
 #define KEYS 256
 
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]){
 	}
 	
 	//get wave data
-	float **wavedata=malloc(sizeof(float) * SAMPLES);
+	float **wavedata=malloc(sizeof(float*) * SAMPLES);
 	checkMalloc(wavedata);
 
 	for (i=0; i<SAMPLES; i++){
@@ -92,9 +92,10 @@ int main(int argc, char *argv[]){
 	FILE *file=openFile(argv[1],"r");
 	for(i=0; i<SAMPLES ;i++){
 		for(j=0; j<WAVELENGTH; j++){
-			int dat;
-			fscanf(file,"%d",&dat);
-			wavedata[i][j]=dat/(float)10000;
+			float dat;
+			//fscanf(file,"%d",&dat);
+			fread((void*)(&dat),sizeof(dat),1,file);
+			wavedata[i][j]=dat/(float)256;
 		}
 	}
 	
